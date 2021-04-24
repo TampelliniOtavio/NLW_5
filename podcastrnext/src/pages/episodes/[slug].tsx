@@ -8,6 +8,9 @@ import { api } from '../../services/api'
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString'
 
 import styles from './episode.module.scss'
+import React from 'react'
+import { usePlayer } from '../../contexts/PlayerContext'
+import Head from 'next/head'
 
 type Episode = {
     id: string;
@@ -27,6 +30,8 @@ type EpisodeProps  = {
 export default function Episode({episode}: EpisodeProps){
     const router = useRouter()
 
+    const { play } =usePlayer()
+
     // não necessário com fallback true ou blocking
     // if (router.isFallback){
     //     return <p>Carregando...</p>
@@ -34,6 +39,11 @@ export default function Episode({episode}: EpisodeProps){
 
     return(
         <div className={styles.episode}>
+            <Head>
+                <title>{episode.title} | Podcastr</title>
+            </Head>
+
+
             <div className={styles.thumbnailContainer}>
                 <Link href='/'>
                     <button type="button">
@@ -42,7 +52,7 @@ export default function Episode({episode}: EpisodeProps){
                 </Link>
                 <Image width={700} height={160} src={episode.thumbnail} objectFit='cover' />
                 <button type='button'>
-                    <img src="/play.svg" alt="Tocar episódio"/>
+                    <img src="/play.svg" onClick={()=>play(episode)} alt="Tocar episódio"/>
                 </button>
             </div>
 
